@@ -1432,7 +1432,7 @@ ArtField* Class::FindStaticField(ObjPtr<mirror::DexCache> dex_cache, uint32_t fi
 void Class::ClearSkipAccessChecksFlagOnAllMethods(PointerSize pointer_size) {
   DCHECK(IsVerified());
   for (auto& m : GetMethods(pointer_size)) {
-    if (!m.IsNative() && m.IsInvokable()) {
+    if (m.IsManagedAndInvokable()) {
       m.ClearSkipAccessChecks();
     }
   }
@@ -1441,7 +1441,7 @@ void Class::ClearSkipAccessChecksFlagOnAllMethods(PointerSize pointer_size) {
 void Class::ClearMustCountLocksFlagOnAllMethods(PointerSize pointer_size) {
   DCHECK(IsVerified());
   for (auto& m : GetMethods(pointer_size)) {
-    if (!m.IsNative() && m.IsInvokable()) {
+    if (m.IsManagedAndInvokable()) {
       m.ClearMustCountLocks();
     }
   }
@@ -1450,7 +1450,7 @@ void Class::ClearMustCountLocksFlagOnAllMethods(PointerSize pointer_size) {
 void Class::ClearDontCompileFlagOnAllMethods(PointerSize pointer_size) {
   DCHECK(IsVerified());
   for (auto& m : GetMethods(pointer_size)) {
-    if (!m.IsNative() && m.IsInvokable()) {
+    if (m.IsManagedAndInvokable()) {
       m.ClearDontCompile();
     }
   }
@@ -1459,7 +1459,7 @@ void Class::ClearDontCompileFlagOnAllMethods(PointerSize pointer_size) {
 void Class::SetSkipAccessChecksFlagOnAllMethods(PointerSize pointer_size) {
   DCHECK(IsVerified());
   for (auto& m : GetMethods(pointer_size)) {
-    if (!m.IsNative() && m.IsInvokable()) {
+    if (m.IsManagedAndInvokable()) {
       m.SetSkipAccessChecks();
     }
   }
