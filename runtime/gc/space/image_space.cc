@@ -3630,6 +3630,15 @@ bool ImageSpace::ValidateOatFile(const OatFile& oat_file,
     return false;
   }
 
+  // For a boot image, the key value store only exists in the first OAT file. Skip other OAT files.
+  if (oat_file.GetOatHeader().GetKeyValueStoreSize() != 0 &&
+      oat_file.GetOatHeader().IsConcurrentCopying() != gUseReadBarrier) {
+    *error_msg =
+        "ValidateOatFile found read barrier state mismatch (oat file: {}, runtime: {})"_format(
+            oat_file.GetOatHeader().IsConcurrentCopying(), gUseReadBarrier);
+    return false;
+  }
+
   const ArtDexFileLoader dex_file_loader;
   size_t dex_file_index = 0;
   for (const OatDexFile* oat_dex_file : oat_file.GetOatDexFiles()) {
