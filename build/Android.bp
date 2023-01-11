@@ -48,6 +48,7 @@ art_clang_tidy_allowed = [
     "modernize-use-using", // TODO: move to art_clang_tidy_errors after b/236243696 is done
     "performance-faster-string-find",
     "performance-for-range-copy",
+    "performance-inefficient-vector-operation",
     "performance-noexcept-move-constructor",
     "performance-unnecessary-value-param",
 ]
