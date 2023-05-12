@@ -3052,7 +3052,7 @@ void MarkCompact::ProcessLinearAlloc() {
     // processing any pages in this arena, then we can madvise the shadow size.
     // Otherwise, we will double the memory use for linear-alloc.
     if (!minor_fault_initialized_ && !others_processing) {
-      ZeroAndReleasePages(arena->Begin() + diff, arena->Size());
+      ZeroAndReleaseMemory(arena->Begin() + diff, arena->Size());
     }
   }
 }
@@ -3146,7 +3146,7 @@ void MarkCompact::CompactionPhase() {
   // We will only iterate once if gKernelHasFaultRetry is true.
   do {
     // madvise the page so that we can get userfaults on it.
-    ZeroAndReleasePages(conc_compaction_termination_page_, kPageSize);
+    ZeroAndReleaseMemory(conc_compaction_termination_page_, kPageSize);
     // The following load triggers 'special' userfaults. When received by the
     // thread-pool workers, they will exit out of the compaction task. This fault
     // happens because we madvised the page.
@@ -3787,7 +3787,7 @@ void MarkCompact::FinishPhase() {
   // and then we triggered a read userfault, which maps a special zero-page.
   if (!minor_fault_initialized_ || !shadow_to_space_map_.IsValid() ||
       shadow_to_space_map_.Size() < (moving_first_objs_count_ + black_page_count_) * kPageSize) {
-    ZeroAndReleasePages(compaction_buffers_map_.Begin() + kPageSize,
+    ZeroAndReleaseMemory(compaction_buffers_map_.Begin() + kPageSize,
                         compaction_buffers_map_.Size() - kPageSize);
   } else if (shadow_to_space_map_.Size() == bump_pointer_space_->Capacity()) {
     // Now that we are going to use minor-faults from next GC cycle, we can
